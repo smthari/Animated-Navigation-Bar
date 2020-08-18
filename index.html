@@ -1,0 +1,192 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+
+
+
+<style>
+*,
+*:before,
+*:after {
+box-sizing: border-box;
+position: relative;
+/* chris: dont-judge-me; */
+}
+
+:root {
+--color-primary: #0c77ce;
+--duration: .3s;
+--easing: cubic-bezier(.5, 0, .5, 1);
+}
+
+html,
+body {
+overflow: hidden;
+height: 100%;
+width: 100%;
+margin: 0;
+padding: 0;
+background-color: var(--color-primary);
+font-size: 24px;
+font-weight: bold;
+
+}
+
+body {
+display: flex;
+justify-content: center;
+align-items: center;
+}
+
+nav {
+padding: 0.5em;
+}
+
+nav>.bg {
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+background-color: #fff;
+box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+}
+
+ul {
+width: 16em;
+margin: 0 auto;
+padding: 0;
+list-style: none;
+display: -webkit-box;
+display: flex;
+flex-direction: row;
+justify-content: center;
+}
+
+li {
+cursor: pointer;
+display: flex;
+flex-direction: row;
+align-items: center;
+border-radius: 1.5rem;
+padding: .2em .5em;
+z-index: 4;
+margin: 0 .25em;
+}
+
+li .background {
+background: var(--color-primary);
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+border-radius: 1rem;
+z-index: -1;
+display: none;
+will-change: transform;
+}
+
+li svg {
+flex-shrink: 0;
+display: inline-block;
+width: 1em;
+height: 1em;
+opacity: 0.4;
+transition: opacity var(--duration);
+}
+
+li>.label {
+display: none;
+margin-left: .5rem;
+font-size: .6em;
+}
+
+li[data-active] .label {
+display: block;
+opacity: 1;
+width: auto;
+}
+
+li[data-active] .background {
+display: block;
+}
+
+li[data-active]>svg {
+opacity: 1;
+}
+</style>
+
+</head>
+
+<body>
+<nav>
+<ul>
+<li>
+<svg data-flip-key="item-1-icon" viewBox="0 0 24 24">
+<path fill="#000000"
+d="M12 5.69L17 10.19V18H15V12H9V18H7V10.19L12 5.69M12 3L2 12H5V20H11V14H13V20H19V12H22L12 3Z" />
+</svg>
+<span class="label" data-flip-key="item-1-label">Home</span>
+<span class="background" data-flip-key="background"></span>
+</li>
+<li>
+<svg data-flip-key="item-2-icon" viewBox="0 0 24 24">
+<path fill="#000000"
+d="M13,7.5H18V9.5H13V7.5M13,14.5H18V16.5H13V14.5M19,3A2,2 0 0,1 21,5V19A2,2 0 0,1 19,21H5A2,2 0 0,1 3,19V5A2,2 0 0,1 5,3H19M19,19V5H5V19H19M11,6V11H6V6H11M10,10V7H7V10H10M11,13V18H6V13H11M10,17V14H7V17H10Z" />
+</svg>
+<span class="label" data-flip-key="item-2-label">Feed</span>
+<span class="background" data-flip-key="background"></span>
+</li>
+<li>
+<svg data-flip-key="item-3-icon" style="width:24px;height:24px" viewBox="0 0 24 24">
+<path fill="#000000"
+d="M16,17H7V10.5C7,8 9,6 11.5,6C14,6 16,8 16,10.5M18,16V10.5C18,7.43 15.86,4.86 13,4.18V3.5A1.5,1.5 0 0,0 11.5,2A1.5,1.5 0 0,0 10,3.5V4.18C7.13,4.86 5,7.43 5,10.5V16L3,18V19H20V18M11.5,22A2,2 0 0,0 13.5,20H9.5A2,2 0 0,0 11.5,22Z" />
+</svg>
+<span class="label" data-flip-key="item-3-label">Notifications</span>
+<span class="background" data-flip-key="background"></span>
+</li>
+<li>
+<svg data-flip-key="item-4-icon" viewBox="0 0 24 24">
+<path fill="#000000"
+d="M4,6H2V20A2,2 0 0,0 4,22H18V20H4V6M20,2A2,2 0 0,1 22,4V16A2,2 0 0,1 20,18H8A2,2 0 0,1 6,16V4A2,2 0 0,1 8,2H20M17,7A3,3 0 0,0 14,4A3,3 0 0,0 11,7A3,3 0 0,0 14,10A3,3 0 0,0 17,7M8,15V16H20V15C20,13 16,11.9 14,11.9C12,11.9 8,13 8,15Z" />
+</svg>
+<span class="label" data-flip-key="item-4-label">Accounts</span>
+<span class="background" data-flip-key="background"></span>
+</li>
+</ul>
+
+<div class="bg" data-flip-key="bg"></div>
+</nav>
+
+<script src='https://unpkg.com/flipping@latest/dist/flipping.web.js'></script>
+<script>
+  const elNav = document.querySelector('nav');
+
+const elLinks = Array.from(elNav.querySelectorAll("ul li"));
+
+elNav.style.setProperty('--total', elLinks.length);
+console.log(elLinks.length);
+
+const flipping = new Flipping({
+easing: 'cubic-bezier(.5, 0, .5, 1)'
+});
+
+elLinks.forEach( (elLink,i) => {
+elLink.addEventListener('click', flipping.wrap(()=>{
+elLinks.forEach( l => delete l.dataset.active );
+elLink.dataset.active = true;
+elNav.style.setProperty('--active', i);
+}));
+});
+
+
+elLinks[0].dataset.active = true;
+elNav.style.setProperty('--active', 0);
+</script>
+
+</body>
+
+</html>
